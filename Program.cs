@@ -16,7 +16,7 @@ namespace AddressBookIO
             {
                 Console.WriteLine("\n1: Enter contact details  \n2: Edit contact details \n3.Delete a contact  \n4.Display Contanct \n5.Get Contact using " +
                     "city name or state name \n6.Display City and State Lists \n7.Display City or state count \n8.Write to file \n9.Read from file" +
-                    "\n10.WriteInToCsv \n11.ReadFromCsv");
+                    "\n10.WriteInToCsv \n11.ReadFromCsv \n12.WriteInToJson \n13.ReadFromJson");
                 int choice = Convert.ToInt32(Console.ReadLine());
                 switch (choice)
                 {
@@ -63,6 +63,12 @@ namespace AddressBookIO
                         break;
                     case 11:
                         c.ReadingFromCsv();
+                        break;
+                    case 12:
+                        c.WriteInToJson();
+                        break;
+                    case 13:
+                        c.ReadFromJson();
                         break;
                     default:
                         Console.WriteLine("Invalid option");
