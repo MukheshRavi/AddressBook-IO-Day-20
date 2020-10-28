@@ -15,7 +15,8 @@ namespace AddressBookIO
             do
             {
                 Console.WriteLine("\n1: Enter contact details  \n2: Edit contact details \n3.Delete a contact  \n4.Display Contanct \n5.Get Contact using " +
-                    "city name or state name \n6.Display City and State Lists \n7.Display City or state count \n8.Write to file \n9.Read from file");
+                    "city name or state name \n6.Display City and State Lists \n7.Display City or state count \n8.Write to file \n9.Read from file" +
+                    "\n10.WriteInToCsv \n11.ReadFromCsv");
                 int choice = Convert.ToInt32(Console.ReadLine());
                 switch (choice)
                 {
@@ -52,10 +53,16 @@ namespace AddressBookIO
                         c.CountForCityAndState();
                         break;
                     case 8:
-                        c.WriteToFile();
+                        c.WriteToTextFile();
                         break;
                     case 9:
-                        c.ReadFromFile();
+                        c.ReadFromTextFile();
+                        break;
+                    case 10:
+                        c.WritingInToCsv();
+                        break;
+                    case 11:
+                        c.ReadingFromCsv();
                         break;
                     default:
                         Console.WriteLine("Invalid option");

@@ -1,6 +1,9 @@
-﻿using System;
+﻿using CsvHelper;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
@@ -10,14 +13,14 @@ namespace AddressBookIO
     [Serializable]
     class Contacts
     {
-        public string frstName;
-        public string lastName;
-        public string address;
-        public string city;
-        public string state;
-        public string email;
-        public string zip;
-        public string phnNo;
+        public string frstName { get; set; }
+        public string lastName { get; set; }
+        public string address { get; set; }
+        public string city { get; set; }
+        public string state { get; set; }
+        public string zip { get; set; }
+        public string phnNo { get; set; }
+        public string email { get; set; }
         public List<Contacts> contactsList = new List<Contacts>();
         public Dictionary<Contacts, string> addressBook = new Dictionary<Contacts, string>();
         public Dictionary<Contacts, string> cityList = new Dictionary<Contacts, string>();
@@ -318,7 +321,7 @@ namespace AddressBookIO
             ///Displays count of city or state
             Console.WriteLine("The count for entered city or state name " + name + "is:" + count);
         }
-        public void WriteToFile()
+        public void WriteToTextFile()
         {
             ///Given path to create or open a file
             string path = @"C:\Users\MUKHESH\source\repos\AddressBookIO\Contacts.txt";
@@ -328,7 +331,7 @@ namespace AddressBookIO
             /// Copy the details from address book list to serialize them in to file
             formatter.Serialize(stream, addressBook);
         }
-        public void ReadFromFile()
+        public void ReadFromTextFile()
         {
             FileStream stream;
             string path = @"C:\Users\MUKHESH\source\repos\AddressBookIO\Contacts.txt";
@@ -346,5 +349,51 @@ namespace AddressBookIO
                         + a.Key.state + "," + a.Key.email + "," + a.Key.zip + "," + a.Key.phnNo);
             };
         }
+        /// <summary>
+        /// This method reads from the file added
+        /// </summary>
+        public void ReadingFromCsv()
+        {
+            //defining the path of csv file
+            string csvFilePath = @"C:\Users\MUKHESH\source\repos\AddressBookIO\Contacts.csv";
+            //making the reader of csv file, required as input in csv reader.
+            //stream reader is basically stream of bytes 
+            var reader = new StreamReader(csvFilePath);
+            //cultureinfo.invariant culture gives info about delimiter and ending of line in csv file
+            var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            //fetching the records from particular csv file
+            List<Contacts> records = csv.GetRecords<Contacts>().ToList();
+            //above code will return a single object, not the list.
+            //get record obtains only one entry
+            //get records returns list of records.
+            foreach (Contacts contacts in records)
+            {
+                Console.WriteLine("Firstname:" + contacts.frstName + "\nLastname:" + contacts.lastName + "\naddress:" + contacts.address +
+                             "\ncity:" + contacts.city + "\nstate:" + contacts.state + "\nzip" + contacts.zip + "\nPhone Number:" + contacts.phnNo);
+                Console.WriteLine("\n");
+            }
+            reader.Close();
+        }
+        public  void WritingInToCsv()
+        {
+            //defining the path of csv file
+            string csvFilePath = @"C:\Users\MUKHESH\source\repos\AddressBookIO\Contacts.csv";
+            //making the reader of csv file, required as input in csv reader.
+            //stream reader is basically stream of bytes 
+            var writer = new StreamWriter(csvFilePath);
+            //cultureinfo.invariant culture gives info about delimiter and ending of line in csv file
+            var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            //fetching the records from particular csv file
+            //var records = csv.GetRecords<Contact>();
+            //above code will return a single object, not the list.
+            //get record obtains only one entry
+            //get records returns list of records.
+            csv.WriteRecords(contactsList);
+            //clears the buffer data, or cache is cleaned of previous data.
+            //many times, files do not get updated and show previous states
+            //hence wrter.flush is called
+            writer.Flush();
+        }
+      
     }
 }
