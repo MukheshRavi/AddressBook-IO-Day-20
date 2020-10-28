@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -6,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Text.Json;
 
 namespace AddressBookIO
 {
@@ -321,6 +323,9 @@ namespace AddressBookIO
             ///Displays count of city or state
             Console.WriteLine("The count for entered city or state name " + name + "is:" + count);
         }
+        /// <summary>
+        /// This method writes into text file 
+        /// </summary>
         public void WriteToTextFile()
         {
             ///Given path to create or open a file
@@ -331,6 +336,9 @@ namespace AddressBookIO
             /// Copy the details from address book list to serialize them in to file
             formatter.Serialize(stream, addressBook);
         }
+        /// <summary>
+        /// This method reads from the text file added
+        /// </summary>
         public void ReadFromTextFile()
         {
             FileStream stream;
@@ -350,7 +358,7 @@ namespace AddressBookIO
             };
         }
         /// <summary>
-        /// This method reads from the file added
+        /// This method reads from the Csv file added
         /// </summary>
         public void ReadingFromCsv()
         {
@@ -374,7 +382,10 @@ namespace AddressBookIO
             }
             reader.Close();
         }
-        public  void WritingInToCsv()
+        /// <summary>
+        /// This method writes into csv file
+        /// </summary>
+        public void WritingInToCsv()
         {
             //defining the path of csv file
             string csvFilePath = @"C:\Users\MUKHESH\source\repos\AddressBookIO\Contacts.csv";
@@ -394,6 +405,34 @@ namespace AddressBookIO
             //hence wrter.flush is called
             writer.Flush();
         }
-      
+        /// <summary>
+        /// This method writes into Json file
+        /// </summary>
+        public void WriteInToJson()
+        {
+            string path = @"C:\Users\MUKHESH\source\repos\AddressBookIO\Contacts.json";
+            using (StreamWriter sw = new StreamWriter(path))
+            {
+                string json = JsonConvert.SerializeObject(contactsList);
+                sw.WriteLine(json);
+                sw.Flush();
+            }
+        }
+        /// <summary>
+        /// This method reads from the Json file added
+        /// </summary>
+        public void ReadFromJson()
+        {
+            string filePath = @"C:\Users\MUKHESH\source\repos\AddressBookIO\Contacts.json";
+            string json = File.ReadAllText(filePath);
+            List<Contacts> list = JsonConvert.DeserializeObject<List<Contacts>>(json);
+            foreach (Contacts contacts in list)
+            {
+                Console.WriteLine("Firstname:" + contacts.frstName + "\nLastname:" + contacts.lastName + "\naddress:" + contacts.address +
+                             "\ncity:" + contacts.city + "\nstate:" + contacts.state + "\nzip" + contacts.zip + "\nPhone Number:" + contacts.phnNo);
+                Console.WriteLine("\n");
+            }
+        }
+
     }
 }
